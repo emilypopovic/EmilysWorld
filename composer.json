@@ -1,0 +1,50 @@
+{
+    "name": "project/emily-world",
+    "description": "A world creator",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Emily",
+            "email": "epopovic@mobials.com"
+        }
+    ],
+    "require": {
+        "slim/slim": "^3.12",
+        "php-di/slim-bridge": "^2.0",
+        "php-di/php-di": "^6.0",
+        "vlucas/phpdotenv": "^2.4",
+        "monolog/monolog": "^2.0",
+        "slim/php-view": "^2.2",
+        "doctrine/orm": "^2.6.2",
+        "league/tactician": "^1.0",
+        "league/flysystem": "^1.0",
+        "league/tactician-container": "^2.0",
+        "bugsnag/bugsnag": "^3.19",
+        "doctrine/doctrine-migrations-bundle": "^2.0",
+        "ramsey/uuid": "^4.0",
+        "doctrine/migrations": "^2.0",
+        "doctrine/dbal": "^2.10",
+        "doctrine/persistence": "^1.3",
+        "league/tactician-bundle": "^1.2",
+        "supervisorphp/configuration": "^0.2.1",
+        "bunny/bunny": "^0.4.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "EmilysWorld\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EmilysWorld\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit tests"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9",
+        "mockery/mockery": "^1.4",
+        "fzaninotto/faker": "^1.9"
+    }
+}

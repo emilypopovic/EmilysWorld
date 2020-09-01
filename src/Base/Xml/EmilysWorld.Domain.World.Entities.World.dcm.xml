@@ -1,0 +1,12 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                    http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <entity name="EmilysWorld\Domain\World\Entities\World" table="emilys_worlds">
+        <id name="id" column="id" type="guid"/>
+        <field name="name" type="string" column="name" nullable="false"/>
+        <field name="type" type="string" column="type" nullable="false"/>
+    </entity>
+
+</doctrine-mapping>
