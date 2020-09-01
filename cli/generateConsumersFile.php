@@ -34,3 +34,4 @@ foreach ($commandMappings as $command => $handler) {
 }
 
 $writer->write($configuration);
+
