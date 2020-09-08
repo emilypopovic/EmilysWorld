@@ -28,7 +28,7 @@ foreach ($commandMappings as $command => $handler) {
         'startretries' => 500,
         'autostart' => true,
         'autorestart' => true,
-        'user' => 'mobials'
+        'user' => 'emily'
     ]);
     $configuration->addSection($section);
 }
