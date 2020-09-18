@@ -9,11 +9,15 @@ use Doctrine\ORM\Tools\Setup;
 use EmilysWorld\Infrastructure\Consumer\CommandQueueConsumer;
 use EmilysWorld\Infrastructure\Doctrine\framework\CustomEventDispatcher;
 use EmilysWorld\Infrastructure\Doctrine\framework\EventDispatcher;
+use EmilysWorld\Infrastructure\Messaging\Middleware\CommandQueueMiddleware;
+use EmilysWorld\Infrastructure\Messaging\Middleware\EntityManagerMiddleware;
+use EmilysWorld\Infrastructure\Messaging\RabbitMQ;
 use League\Tactician\CommandBus;
 use League\Tactician\Container\ContainerLocator;
 use League\Tactician\Handler\CommandHandlerMiddleware;
 use League\Tactician\Handler\CommandNameExtractor\ClassNameExtractor;
 use League\Tactician\Handler\MethodNameInflector\HandleInflector;
+use League\Tactician\Plugins\LockingMiddleware;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
@@ -96,9 +100,15 @@ $settings = [
             new HandleInflector() //Deduce method name to call on command handler -> Handle command by calling "handle" method
         );
 
-        return new CommandBus([ //League\Tactician\CommandBus
-            $commandHandlerMiddleware,
-        ]);
+        $rabbitMQ = $container->get(RabbitMQ::class);
+        return new CommandBus(
+            [
+                new LockingMiddleware(),
+                new CommandQueueMiddleware($rabbitMQ, $container->get('settings.command_bus.exchange_name')),
+                new EntityManagerMiddleware($container->get(EntityManager::class)),
+                $commandHandlerMiddleware,
+            ]
+        ); //League\Tactician\CommandBus
     },
     Logger::class => function (ContainerInterface $container) {
         $log = new Logger(PRODUCT_NAME);
@@ -143,16 +153,16 @@ $settings = [
         );
         return $consumer;
     },
-//    RabbitMQ::class => function (ContainerInterface $container) {
-//        $adapter = new RabbitMQ(
-//            $container->get('rabbit.host'),
-//            $container->get('rabbit.vhost'),
-//            $container->get('rabbit.username'),
-//            $container->get('rabbit.password')
-//        );
-//
-//        return $adapter;
-//    }
+    RabbitMQ::class => function (ContainerInterface $container) {
+        $adapter = new RabbitMQ(
+            $container->get('rabbit.host'),
+            $container->get('rabbit.vhost'),
+            $container->get('rabbit.username'),
+            $container->get('rabbit.password')
+        );
+
+        return $adapter;
+    }
 ];
 
 if (APP_ENV !== 'development') {

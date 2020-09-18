@@ -27,7 +27,8 @@
         "doctrine/persistence": "^1.3",
         "league/tactician-bundle": "^1.2",
         "supervisorphp/configuration": "^0.2.1",
-        "bunny/bunny": "^0.4.2"
+        "bunny/bunny": "^0.4.2",
+        "php-amqplib/php-amqplib": "^2.12"
     },
     "autoload": {
         "psr-4": {
