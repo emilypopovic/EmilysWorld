@@ -8,9 +8,8 @@ use Bunny\Channel;
 use Bunny\Client;
 use Bunny\Message;
 use Doctrine\ORM\EntityManagerInterface;
-use EmilysWorld\Infrastructure\Messaging\Command;
+use EmilysWorld\Infrastructure\Messaging\CommandBus;
 use EmilysWorld\Infrastructure\Messaging\ImmediateCommand;
-use League\Tactician\CommandBus;
 use Psr\Log\LoggerInterface;
 
 class CommandQueueConsumer
@@ -154,14 +153,12 @@ class CommandQueueConsumer
         $body = $message->content;
         $decoded = json_decode($body, true);
 
+        var_dump($decoded);
+
         if(!is_array($decoded)){
             return false;
         }
 
-        /**
-         * deserialize our original command
-         * @var Command $className
-         */
         $className = $this->commandMappings[$message->routingKey]['command'];
         $originalCommand = $className::deserialize($decoded);
 

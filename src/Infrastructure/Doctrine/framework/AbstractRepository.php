@@ -2,9 +2,9 @@
 
 namespace EmilysWorld\Infrastructure\Doctrine\framework;
 
-    use Doctrine\ORM\EntityManagerInterface;
-    use Doctrine\ORM\ORMException;
-    use Ramsey\Uuid\Uuid;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMException;
+use Ramsey\Uuid\Uuid;
 
 abstract class AbstractRepository
 {

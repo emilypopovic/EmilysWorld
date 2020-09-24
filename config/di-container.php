@@ -12,6 +12,7 @@ use EmilysWorld\Infrastructure\Doctrine\framework\EventDispatcher;
 use EmilysWorld\Infrastructure\Messaging\Middleware\CommandQueueMiddleware;
 use EmilysWorld\Infrastructure\Messaging\Middleware\EntityManagerMiddleware;
 use EmilysWorld\Infrastructure\Messaging\RabbitMQ;
+use EmilysWorld\Infrastructure\Messaging\Tactician;
 use League\Tactician\CommandBus;
 use League\Tactician\Container\ContainerLocator;
 use League\Tactician\Handler\CommandHandlerMiddleware;
@@ -101,14 +102,15 @@ $settings = [
         );
 
         $rabbitMQ = $container->get(RabbitMQ::class);
-        return new CommandBus(
+        $commandBus = new CommandBus(
             [
                 new LockingMiddleware(),
                 new CommandQueueMiddleware($rabbitMQ, $container->get('settings.command_bus.exchange_name')),
                 new EntityManagerMiddleware($container->get(EntityManager::class)),
                 $commandHandlerMiddleware,
             ]
-        ); //League\Tactician\CommandBus
+        );
+        return new Tactician($commandBus);
     },
     Logger::class => function (ContainerInterface $container) {
         $log = new Logger(PRODUCT_NAME);

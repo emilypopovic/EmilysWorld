@@ -53,8 +53,6 @@ class HandlesCreateWorld
         );
 
         //store in repo
-        $this->worldsRepository->store($newWorld);
-
-        return true;
+        return $this->worldsRepository->store($newWorld);
     }
 }
