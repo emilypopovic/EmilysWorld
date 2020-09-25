@@ -6,8 +6,9 @@ namespace EmilysWorld\Infrastructure\Messaging\Middleware;
 use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\ORM\EntityManager;
 use EmilysWorld\Infrastructure\Messaging\Command;
+use League\Tactician\Middleware;
 
-class EntityManagerMiddleware implements \League\Tactician\Middleware
+class EntityManagerMiddleware implements Middleware
 {
     /**
      * @var EntityManager

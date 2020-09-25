@@ -52,6 +52,8 @@ class HandlesCreateWorld
             'planet'
         );
 
+        $this->logger->debug("Storing the new world with the name: " . $command->getWorldName());
+
         //store in repo
         return $this->worldsRepository->store($newWorld);
     }
