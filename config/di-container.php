@@ -1,7 +1,7 @@
 <?php
 
 use AVReviews\Infrastructure\SlimErrorHandler;
-use Bunny\Client;
+use Bunny\Client as BunnyClient;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -9,11 +9,12 @@ use Doctrine\ORM\Tools\Setup;
 use EmilysWorld\Infrastructure\Consumer\CommandQueueConsumer;
 use EmilysWorld\Infrastructure\Doctrine\framework\CustomEventDispatcher;
 use EmilysWorld\Infrastructure\Doctrine\framework\EventDispatcher;
+use EmilysWorld\Infrastructure\Messaging\CommandBus;
 use EmilysWorld\Infrastructure\Messaging\Middleware\CommandQueueMiddleware;
 use EmilysWorld\Infrastructure\Messaging\Middleware\EntityManagerMiddleware;
 use EmilysWorld\Infrastructure\Messaging\RabbitMQ;
 use EmilysWorld\Infrastructure\Messaging\Tactician;
-use League\Tactician\CommandBus;
+use League\Tactician\CommandBus as TacticianCommandBus;
 use League\Tactician\Container\ContainerLocator;
 use League\Tactician\Handler\CommandHandlerMiddleware;
 use League\Tactician\Handler\CommandNameExtractor\ClassNameExtractor;
@@ -102,7 +103,7 @@ $settings = [
         );
 
         $rabbitMQ = $container->get(RabbitMQ::class);
-        $commandBus = new CommandBus(
+        $commandBus = new TacticianCommandBus(
             [
                 new LockingMiddleware(),
                 new CommandQueueMiddleware($rabbitMQ, $container->get('settings.command_bus.exchange_name')),
@@ -141,7 +142,7 @@ $settings = [
             'user' => $container->get('rabbit.username'),
             'password' => $container->get('rabbit.password'),
         ];
-        $bunny = new Client($connection);
+        $bunny = new BunnyClient($connection);
         $bunny->connect();
         $channel = $bunny->channel();
         $consumer = new CommandQueueConsumer(
@@ -156,14 +157,12 @@ $settings = [
         return $consumer;
     },
     RabbitMQ::class => function (ContainerInterface $container) {
-        $adapter = new RabbitMQ(
+        return new RabbitMQ(
             $container->get('rabbit.host'),
             $container->get('rabbit.vhost'),
             $container->get('rabbit.username'),
             $container->get('rabbit.password')
         );
-
-        return $adapter;
     }
 ];
 
