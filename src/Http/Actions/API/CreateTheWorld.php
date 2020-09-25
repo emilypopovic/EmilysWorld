@@ -5,7 +5,7 @@ namespace EmilysWorld\Http\Actions\API;
 
 
 use EmilysWorld\Domain\World\Commands\CreateWorld;
-use League\Tactician\CommandBus;
+use EmilysWorld\Infrastructure\Messaging\CommandBus;
 use Slim\Http\Request;
 use Slim\Http\Response;
 

@@ -6,7 +6,7 @@ namespace EmilysWorld\Domain\World\Subscribers;
 
 use EmilysWorld\Domain\World\Commands\CreateWorld;
 use EmilysWorld\Domain\World\Events\WorldWasCreated;
-use League\Tactician\CommandBus;
+use EmilysWorld\Infrastructure\Messaging\CommandBus;
 use Psr\Log\LoggerInterface;
 
 class WorldsSubscriber

@@ -3,8 +3,7 @@
 use Doctrine\ORM\EntityManager;
 use EmilysWorld\Base\EmilysApp;
 use EmilysWorld\Domain\World\Commands\CreateWorld;
-use EmilysWorld\Domain\World\Entities\World;
-use League\Tactician\CommandBus;
+use EmilysWorld\Infrastructure\Messaging\CommandBus;
 use Ramsey\Uuid\Uuid;
 
 include_once __DIR__ . '/../config/bootstrap.php';

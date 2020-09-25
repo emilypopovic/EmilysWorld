@@ -3,7 +3,7 @@
 use EmilysWorld\Domain\World\Commands\CreateWorld;
 use Doctrine\ORM\EntityManager;
 use EmilysWorld\Base\EmilysApp;
-use League\Tactician\CommandBus;
+use EmilysWorld\Infrastructure\Messaging\CommandBus;
 
 include_once __DIR__ . '/../config/bootstrap.php';
 
