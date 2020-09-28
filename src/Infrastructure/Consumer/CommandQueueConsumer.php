@@ -154,9 +154,6 @@ class CommandQueueConsumer
         $body = $message->content;
         $decoded = json_decode($body, true);
 
-        var_dump($decoded);
-        $this->logger->debug("Decoded command is this: " . $decoded);
-
         if(!is_array($decoded)){
             return false;
         }
