@@ -19,7 +19,6 @@ $writer = new IniFileWriter($filesystem,'consumers.conf');
 $configuration = new Configuration();
 
 foreach ($commandMappings as $command => $handler) {
-
     $cmdName = defined($command . '::ROUTING_KEY') ? $command::ROUTING_KEY : $command::COMMAND_NAME;
     $section = new Program('emilysWorld_' . $cmdName, [
         'directory' => __DIR__ . '/../',
@@ -29,10 +28,9 @@ foreach ($commandMappings as $command => $handler) {
         'startretries' => 500,
         'autostart' => true,
         'autorestart' => true,
-        'user' => 'vagrant'
+        'user' => 'mobials'
     ]);
     $configuration->addSection($section);
 }
 
 $writer->write($configuration);
-

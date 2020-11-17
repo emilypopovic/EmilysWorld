@@ -1,7 +1,7 @@
 <?php
 
 use AVReviews\Infrastructure\SlimErrorHandler;
-use Bunny\Client as BunnyClient;
+use Bunny\Client;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -9,17 +9,11 @@ use Doctrine\ORM\Tools\Setup;
 use EmilysWorld\Infrastructure\Consumer\CommandQueueConsumer;
 use EmilysWorld\Infrastructure\Doctrine\framework\CustomEventDispatcher;
 use EmilysWorld\Infrastructure\Doctrine\framework\EventDispatcher;
-use EmilysWorld\Infrastructure\Messaging\CommandBus;
-use EmilysWorld\Infrastructure\Messaging\Middleware\CommandQueueMiddleware;
-use EmilysWorld\Infrastructure\Messaging\Middleware\EntityManagerMiddleware;
-use EmilysWorld\Infrastructure\Messaging\RabbitMQ;
-use EmilysWorld\Infrastructure\Messaging\Tactician;
-use League\Tactician\CommandBus as TacticianCommandBus;
+use League\Tactician\CommandBus;
 use League\Tactician\Container\ContainerLocator;
 use League\Tactician\Handler\CommandHandlerMiddleware;
 use League\Tactician\Handler\CommandNameExtractor\ClassNameExtractor;
 use League\Tactician\Handler\MethodNameInflector\HandleInflector;
-use League\Tactician\Plugins\LockingMiddleware;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
@@ -102,16 +96,9 @@ $settings = [
             new HandleInflector() //Deduce method name to call on command handler -> Handle command by calling "handle" method
         );
 
-        $rabbitMQ = $container->get(RabbitMQ::class);
-        $commandBus = new TacticianCommandBus(
-            [
-                new LockingMiddleware(),
-                new CommandQueueMiddleware($rabbitMQ, $container->get('settings.command_bus.exchange_name')),
-                new EntityManagerMiddleware($container->get(EntityManager::class)),
-                $commandHandlerMiddleware,
-            ]
-        );
-        return new Tactician($commandBus);
+        return new CommandBus([ //League\Tactician\CommandBus
+            $commandHandlerMiddleware,
+        ]);
     },
     Logger::class => function (ContainerInterface $container) {
         $log = new Logger(PRODUCT_NAME);
@@ -142,7 +129,7 @@ $settings = [
             'user' => $container->get('rabbit.username'),
             'password' => $container->get('rabbit.password'),
         ];
-        $bunny = new BunnyClient($connection);
+        $bunny = new Client($connection);
         $bunny->connect();
         $channel = $bunny->channel();
         $consumer = new CommandQueueConsumer(
@@ -156,14 +143,16 @@ $settings = [
         );
         return $consumer;
     },
-    RabbitMQ::class => function (ContainerInterface $container) {
-        return new RabbitMQ(
-            $container->get('rabbit.host'),
-            $container->get('rabbit.vhost'),
-            $container->get('rabbit.username'),
-            $container->get('rabbit.password')
-        );
-    }
+//    RabbitMQ::class => function (ContainerInterface $container) {
+//        $adapter = new RabbitMQ(
+//            $container->get('rabbit.host'),
+//            $container->get('rabbit.vhost'),
+//            $container->get('rabbit.username'),
+//            $container->get('rabbit.password')
+//        );
+//
+//        return $adapter;
+//    }
 ];
 
 if (APP_ENV !== 'development') {

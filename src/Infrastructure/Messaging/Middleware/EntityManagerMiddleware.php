@@ -1,14 +1,11 @@
 <?php
 
-namespace EmilysWorld\Infrastructure\Messaging\Middleware;
-
 
 use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\ORM\EntityManager;
-use EmilysWorld\Infrastructure\Messaging\Command;
-use League\Tactician\Middleware;
+use Infrastructure\Messaging\Command;
 
-class EntityManagerMiddleware implements Middleware
+class EntityManagerMiddleware implements \League\Tactician\Middleware
 {
     /**
      * @var EntityManager

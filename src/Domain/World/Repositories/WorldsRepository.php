@@ -21,7 +21,7 @@ class WorldsRepository extends AbstractRepository
     /**
      * @param string $worldName
      * @return World|null
-     * @throws \Exception
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findByWorldName(string $worldName): ?World
     {

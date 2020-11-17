@@ -16,7 +16,7 @@ class CreateWorld implements Command
     private $worldName;
 
     /**
-     * CreateWorld constructor.
+     * SendCustomerReportEmail constructor.
      *
      * @param string $worldName
      */
@@ -44,12 +44,11 @@ class CreateWorld implements Command
     /**
      * @inheritDoc
      */
-    public static function deserialize(array $data): self
+    public static function deserialize(array $data)
     {
         return new static(
             $data['worldName']
-        );
-    }
+        );    }
 
     /**
      * @inheritDoc

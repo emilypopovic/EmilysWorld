@@ -4,9 +4,8 @@
 namespace EmilysWorld\Domain\World\Subscribers;
 
 
-use EmilysWorld\Domain\World\Commands\CreateWorld;
 use EmilysWorld\Domain\World\Events\WorldWasCreated;
-use EmilysWorld\Infrastructure\Messaging\CommandBus;
+use League\Tactician\CommandBus;
 use Psr\Log\LoggerInterface;
 
 class WorldsSubscriber
@@ -18,7 +17,7 @@ class WorldsSubscriber
     private $logger;
 
     /**
-     * WorldsSubscriber constructor.
+     * AuthenticomEventSubscriber constructor.
      * @param CommandBus              $commandBus
      * @param LoggerInterface         $logger
      */
@@ -33,6 +32,6 @@ class WorldsSubscriber
 
     public function onWorldWasCreated(WorldWasCreated $event): void
     {
-        $this->commandBus->handle(new CreateWorld($event->getWorldName()));
+        $this->commandBus->handle();
     }
 }

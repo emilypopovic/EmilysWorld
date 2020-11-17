@@ -28,7 +28,8 @@
         "league/tactician-bundle": "^1.2",
         "supervisorphp/configuration": "^0.2.1",
         "bunny/bunny": "^0.4.2",
-        "php-amqplib/php-amqplib": "^2.12"
+        "twig/twig": "^3.1",
+        "aws/aws-sdk-php": "^3.161"
     },
     "autoload": {
         "psr-4": {
